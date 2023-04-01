@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: demo-ui
-          image: 830206065100.dkr.ecr.us-east-1.amazonaws.com/cac-npx-ui:v1.0
+          image: 599355715474.dkr.ecr.us-east-1.amazonaws.com/demo-ui:v1
           ports:
             - containerPort: 3000 # Port that your React app is running on
           env:
