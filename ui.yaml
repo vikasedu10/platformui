@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-ui-deployment
+spec:
+  replicas: 1 # Number of replicas you want to deploy
+  selector:
+    matchLabels:
+      app: demo-ui
+  template:
+    metadata:
+      labels:
+        app: demo-ui
+    spec:
+      containers:
+        - name: demo-ui
+          image: 830206065100.dkr.ecr.us-east-1.amazonaws.com/cac-npx-ui:v1.0
+          ports:
+            - containerPort: 3000 # Port that your React app is running on
+          env:
+            - name: REACT_APP_API_URL
+              value: test.com # Replace with your API URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-ui-service
+spec:
+  selector:
+      app: demo-ui
+  ports:
+    - name: http
+      port: 8081 # Port that the service should listen on
+      targetPort: 3000 # Port that the pods are listening on
+  type: LoadBalancer # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
