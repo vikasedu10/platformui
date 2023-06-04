@@ -1,33 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-ui-deployment
+  name: cacui
 spec:
   replicas: 1 # Number of replicas you want to deploy
   selector:
     matchLabels:
-      app: demo-ui
+      app: cacui
   template:
     metadata:
       labels:
-        app: demo-ui
+        app: cacui
     spec:
       containers:
-        - name: demo-ui
+        - name: cacui
           image: 599355715474.dkr.ecr.us-east-1.amazonaws.com/demo-ui:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
           env:
-            - name: REACT_APP_API_URL
-              value: test.com # Replace with your API URL
+            - name: DNS_URL
+              value: cacplatformui.com1
+            - name: KEYCLOAK_URL
+              value: http://keycloak-service.default.svc.cluster.local:8080/auth
+            - name: KEYCLOAK_REALM_NAME
+              value: keycloak-cac-platform
+            - name: KEYCLOAK_CLIENT_ID
+              value: react-auth
+
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-ui-service
+  name: cacui
 spec:
   selector:
-      app: demo-ui
+      app: cacui
   ports:
     - name: http
       port: 8081 # Port that the service should listen on

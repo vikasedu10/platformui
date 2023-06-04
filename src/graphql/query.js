@@ -8,3 +8,12 @@ query GetStudentList {
         data {Student_Name, Student_Roll} 
     }
 }`;
+
+export const GET_TESTING_RESPONSE = gql`
+query GetTestingResponse {
+    getTestingResponse {
+        Message,
+        Status_Code,
+        Data
+    }
+}`;
