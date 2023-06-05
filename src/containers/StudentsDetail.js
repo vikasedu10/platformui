@@ -1,10 +1,14 @@
 import React from "react"
 import { useQuery } from '@apollo/client';
-import { GET_STUDENT_DETAILS } from '../graphql/query';
+import { GET_STUDENT_DETAILS, GET_TESTING_RESPONSE } from '../graphql/query';
 import { ShowPopup } from "./ShowPopup";
 export const StudentsDetail = () => {
   const { loading, error, data } = useQuery(GET_STUDENT_DETAILS, { pollInterval: 12300 })
-
+  const { loading:testResponse } = useQuery(GET_TESTING_RESPONSE, {
+    onCompleted(data) {
+      console.log("API")
+    },
+  });
   const popupButtonType = () => <span class="border-0" data-bs-toggle="modal" data-bs-target="#student_delete">
     <i className="fa-solid mx-1 fa-trash"></i>
   </span>

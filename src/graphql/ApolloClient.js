@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
-const a = 12;
+const DNS_URL = process.env.REACT_APP_PLATFORM_DNS_URL
 export const client = new ApolloClient({
-    uri: "http://cacplatformapi-service.default.svc.cluster.local:9091/goengine",
+    uri: `${DNS_URL}`,
     cache: new InMemoryCache(),
 });
