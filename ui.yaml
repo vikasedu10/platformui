@@ -22,9 +22,9 @@ spec:
             - name: REACT_APP_DNS_URL
               value: cacplatformui.com1
             - name: REACT_APP_PLATFORM_DNS_URL
-              value: cacplatformapi-service.default.svc.cluster.local:9091/goengine
+              value: cacplatformapi.default.svc.cluster.local:9091/goengine
             - name: REACT_APP_KEYCLOAK_URL
-              value: http://keycloak-service.default.svc.cluster.local:8080/auth
+              value: http://keycloak.default.svc.cluster.local:8080/auth
             - name: REACT_APP_KEYCLOAK_REALM_NAME
               value: keycloak-cac-platform
             - name: REACT_APP_KEYCLOAK_CLIENT_ID
