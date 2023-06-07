@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: cacplatformui
-          image: 599355715474.dkr.ecr.us-east-1.amazonaws.com/demo-ui:v1
+          image: 430528729342.dkr.ecr.ap-south-1.amazonaws.com/cacplatformui:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
