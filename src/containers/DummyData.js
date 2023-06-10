@@ -8,11 +8,12 @@ export const DummyData = () => {
       console.log("API")
     },
   });
-    return (
-        <>
-          <div className='m-4'>
-            <span>Dashboard.</span>
-          </div>  
-        </>
-    )
+  if (loading) return <p>Loading data...</p>
+  return (
+      <>
+        <div className='m-4'>
+          <span>Dashboard.</span>
+        </div>  
+      </>
+  )
 }

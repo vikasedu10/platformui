@@ -3,10 +3,14 @@ import { useQuery } from '@apollo/client';
 import { GET_STUDENT_DETAILS, GET_TESTING_RESPONSE } from '../graphql/query';
 import { ShowPopup } from "./ShowPopup";
 export const StudentsDetail = () => {
-  const { loading, error, data } = useQuery(GET_STUDENT_DETAILS, { pollInterval: 12300 })
-  const { loading:testResponse } = useQuery(GET_TESTING_RESPONSE, {
+  const { loading:studentDetailsLoading, error, data } = useQuery(GET_STUDENT_DETAILS, {
     onCompleted(data) {
-      console.log("API")
+      console.log("Data: ", data);
+    }
+  })
+  const { loading:testResponseLoading } = useQuery(GET_TESTING_RESPONSE, {
+    onCompleted(data) {
+      console.log("Data", data);
     },
   });
   const popupButtonType = () => <span class="border-0" data-bs-toggle="modal" data-bs-target="#student_delete">
@@ -14,6 +18,8 @@ export const StudentsDetail = () => {
   </span>
   const handleClusterDelete = () => {
   }
+  if (studentDetailsLoading) return <p>studentDetailsLoading</p>
+  if (testResponseLoading) return <p>testResponseLoading</p>
   if (error)
     return <div className="container mt-4">
       <div className='col-6'>
@@ -25,7 +31,7 @@ export const StudentsDetail = () => {
       <br />
       <br />
       <div className='col-6'>
-        {loading ?
+        {studentDetailsLoading ?
           <div className="spinner-border d-flex spinner-border-sm" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>

@@ -14,13 +14,15 @@ spec:
     spec:
       containers:
         - name: cacplatformui
-          image: 430528729342.dkr.ecr.ap-south-1.amazonaws.com/cacplatformui:v1
+          image: cacplatformui.azurecr.io/cacplatformui:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
           env:
             - name: REACT_APP_DNS_URL
               value: cacplatformui.com1
+            - name: REACT_APP_NODE_ENV
+              value: production
             - name: REACT_APP_PLATFORM_DNS_URL
               value: cacplatformapi.default.svc.cluster.local:9091/goengine
             - name: REACT_APP_KEYCLOAK_URL
