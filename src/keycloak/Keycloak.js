@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js';
-const KEYCLOAK_REALM_NAME = process.env.KEYCLOAK_REALM_NAME
-const KEYCLOAK_CLIENT_ID = process.env.KEYCLOAK_CLIENT_ID
-const KEYCLOAK_URL = process.env.KEYCLOAK_URL
+const KEYCLOAK_REALM_NAME = process.env.REACT_APP_KEYCLOAK_REALM_NAME
+const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT_ID
+const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL
 const keycloak = new Keycloak({
     url: `${KEYCLOAK_URL}`,
     realm: `${KEYCLOAK_REALM_NAME}`,

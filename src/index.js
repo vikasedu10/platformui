@@ -3,18 +3,18 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { client } from "./graphql/ApolloClient";
 import { ApolloProvider } from "@apollo/client";
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloak from "./keycloak/Keycloak";
+// import { ReactKeycloakProvider } from "@react-keycloak/web";
+// import keycloak from "./keycloak/Keycloak";
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-    <ReactKeycloakProvider authClient={keycloak}>
+    // <ReactKeycloakProvider authClient={keycloak}>
         <React.StrictMode>
             <ApolloProvider client={client}>
                 <App />
             </ApolloProvider>
         </React.StrictMode>
-    </ReactKeycloakProvider>
+    // </ReactKeycloakProvider>
 
 )
 if (module.hot && process.env.REACT_APP_NODE_ENV !== "production") {

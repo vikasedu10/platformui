@@ -1,4 +1,4 @@
-import { useKeycloak } from '@react-keycloak/web';
+// import { useKeycloak } from '@react-keycloak/web';
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { SearchModal } from './SearchModal';
@@ -15,12 +15,12 @@ export const TopNavbar = () => {
         }
         setSearchText(text);
     };
-    const [showLoader, setShowLoader] = useState(false);
-    const { keycloak, initialized } = useKeycloak();
-    console.log(initialized,showLoader);
-    useEffect(() => {
-        setShowLoader(true);
-    }, [keycloak]);
+    // const [showLoader, setShowLoader] = useState(false);
+    // const { keycloak, initialized } = useKeycloak();
+    // console.log(initialized,showLoa/der);
+    // useEffect(() => {
+    //     setShowLoader(true);
+    // }, [keycloak]);
 
     const SearchForm = <input value={searchText} className="search-form-input form-control me-2 mr-sm-2 my-1" onChange={handleSearchChange} id="search-input" type="search" placeholder="Search: Alt+/" aria-label="Search across siksha" />
     // if (showLoader) return <span>Loading...</span>
@@ -69,7 +69,7 @@ export const TopNavbar = () => {
                             </span>
                             <ul className="dropdown-menu my-4">
                                 <li><h6 className="dropdown-header">Account Information</h6></li>
-                                {!!keycloak.authenticated && (
+                                {/* {!!keycloak.authenticated && (
                                     <><li className="d-flex px-2">
                                         <div className="ms-auto">
                                             <i style={{ fontSize: "28px" }} className="icon-navbar fa-solid fa-circle-user"></i>
@@ -84,7 +84,7 @@ export const TopNavbar = () => {
                                 {!keycloak.authenticated && (
                                     <li><button onClick={() => keycloak.login()} className="dropdown-item" href="#">Login</button></li>
 
-                                )}
+                                )} */}
                             </ul>
                         </li>
                     </ul>

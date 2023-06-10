@@ -40,22 +40,22 @@ export const StudentDetail = () => {
               </div>
               {clusterData &&
                 <div className=''>
-                  <div class="mb-3 row">
-                    <label for="clusterId" class="col-sm-2 col-form-label">Provision ID</label>
-                    <div class="col-sm-10">
-                      <input type="text" readonly class="form-control-plaintext" id="clusterId" value={clusterData.getClusterDetail.provisionId} />
+                  <div className="mb-3 row">
+                    <label for="clusterId" className="col-sm-2 col-form-label">Provision ID</label>
+                    <div className="col-sm-10">
+                      <input type="text" readonly className="form-control-plaintext" id="clusterId" value={clusterData.getClusterDetail.provisionId} />
                     </div>
                   </div>
-                  <div class="mb-3 row">
-                    <label for="clusterName" class="col-sm-2 col-form-label">Cluster Name</label>
-                    <div class="col-sm-10">
-                      <input type="text" readonly class="form-control-plaintext" id="clusterName" value={clusterData.clusterName} />
+                  <div className="mb-3 row">
+                    <label for="clusterName" className="col-sm-2 col-form-label">Cluster Name</label>
+                    <div className="col-sm-10">
+                      <input type="text" readonly className="form-control-plaintext" id="clusterName" value={clusterData.clusterName} />
                     </div>
                   </div>
-                  <div class="mb-3 row">
-                    <label for="clusterName" class="col-sm-2 col-form-label">Node Count</label>
-                    <div class="col-sm-10">
-                      <input type="text" readonly class="form-control-plaintext" id="clusterName" value={clusterData.nodeCount} />
+                  <div className="mb-3 row">
+                    <label for="clusterName" className="col-sm-2 col-form-label">Node Count</label>
+                    <div className="col-sm-10">
+                      <input type="text" readonly className="form-control-plaintext" id="clusterName" value={clusterData.nodeCount} />
                     </div>
                   </div>
                 </div>

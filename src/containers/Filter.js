@@ -3,12 +3,12 @@ import React from 'react'
 export const Filter = () => {
     return (
         <>
-            <div class="offcanvas offcanvas-end" tabIndex="-1" id="filterData" aria-labelledby="filterDataLabel">
-                <div class="offcanvas-header">
-                    <h6 class="offcanvas-title" id="filterDataLabel">Filter</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div className="offcanvas offcanvas-end" tabIndex="-1" id="filterData" aria-labelledby="filterDataLabel">
+                <div className="offcanvas-header">
+                    <h6 className="offcanvas-title" id="filterDataLabel">Filter</h6>
+                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body my-2 mx-2">
+                <div className="offcanvas-body my-2 mx-2">
                     Filter
                 </div>
             </div>
