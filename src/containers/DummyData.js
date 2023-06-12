@@ -5,10 +5,10 @@ import { GET_TESTING_RESPONSE } from '../graphql/query';
 export const DummyData = () => {
   const { loading } = useQuery(GET_TESTING_RESPONSE, {
     onCompleted(data) {
-      console.log("API")
+      console.log("API:", data)
     },
   });
-  if (loading) return <p>Loading data...</p>
+  // if (loading) return <p>Loading data...</p>
   return (
       <>
         <div className='m-4'>
