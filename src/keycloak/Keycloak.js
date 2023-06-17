@@ -8,7 +8,7 @@ const keycloak = new Keycloak({
     clientId: `${KEYCLOAK_CLIENT_ID}`,
     
     // url: 'http://localhost:8080/auth',
-    // realm: 'keycloak-cac-platform',
+    // realm: 'keycloak-platform',
     // clientId: 'react-auth',
     // onLoad: 'login-required',
 });

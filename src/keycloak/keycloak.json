@@ -1,5 +1,5 @@
 {
-    "realm": "keycloak-cac-platform",
+    "realm": "keycloak-platform",
     "auth-server-url": "http://localhost:8080/auth/",
     "ssl-required": "external",
     "resource": "react-auth",

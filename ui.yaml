@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cacplatformui
+  name: testui
 spec:
   replicas: 1 # Number of replicas you want to deploy
   selector:
     matchLabels:
-      app: cacplatformui
+      app: testui
   template:
     metadata:
       labels:
-        app: cacplatformui
+        app: testui
     spec:
       containers:
-        - name: cacplatformui
+        - name: testui
           image: cacplatformui.azurecr.io/cacplatformui:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
           env:
             - name: REACT_APP_DNS_URL
-              value: cacplatformui.com1
+              value: platformui.com1
             - name: REACT_APP_NODE_ENV
               value: production
             - name: REACT_APP_PLATFORM_DNS_URL
-              value: cacplatformapi.default.svc.cluster.local:9091/goengine
+              value: platformapi.default.svc.cluster.local:9091/goengine
             - name: REACT_APP_KEYCLOAK_URL
               value: http://keycloak.default.svc.cluster.local:8080/auth
             - name: REACT_APP_KEYCLOAK_REALM_NAME
-              value: keycloak-cac-platform
+              value: keycloak-platform
             - name: REACT_APP_KEYCLOAK_CLIENT_ID
               value: react-auth
           resources:
@@ -42,12 +42,30 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cacplatformui
+  name: testui
 spec:
   selector:
-    app: cacplatformui
+    app: testui
   ports:
     - name: http
-      port: 8081 # Port that the service should listen on
+      port: 3000 # Port that the service should listen on
       targetPort: 3000 # Port that the pods are listening on
-  type: LoadBalancer # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
+ # type: LoadBalancer # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
+---
+kind: Ingress
+metadata:
+  name: testui
+  # namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: a1123684039b04b808be426dac966ae3-1216601411.ap-south-1.elb.amazonaws.com # Nginx ELB DNS
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: testui
+                port:
+                  number: 3000
