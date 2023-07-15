@@ -28,7 +28,8 @@ export const RoutingModule = () => {
             <TopNavbar />
             <Routes>
               <Route path="*" element={<PNF />} />
-              <Route path="/" exact element={<Navigate replace to="/dashboard" />} />
+              <Route path="/platformui" exact element={<Navigate replace to="/dashboard" />} /> */}
+              <Route path="/" exact element={<StudentMain />} />
               <Route path="/school" element={<StudentsDetail />} />
               <Route path="/secured"
                 element={

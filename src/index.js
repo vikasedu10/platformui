@@ -17,6 +17,7 @@ root.render(
     </ReactKeycloakProvider>
 
 )
+console.log(process.env.REACT_APP_NODE_ENV, "process.env.REACT_APP_NODE_ENV")
 if (module.hot && process.env.REACT_APP_NODE_ENV !== "production") {
     module.hot.accept();
 }

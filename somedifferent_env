@@ -1,0 +1,5 @@
+# REACT_APP_PLATFORM_DNS_URL=http://localhost:9091/goengine
+# REACT_APP_KEYCLOAK_REALM_NAME=keycloak-cac-platform
+# REACT_APP_KEYCLOAK_CLIENT_ID=react-auth
+# REACT_APP_KEYCLOAK_URL=http://keycloak.default.svc.cluster.local:8080/auth
+# REACT_APP_NODE_ENV=development

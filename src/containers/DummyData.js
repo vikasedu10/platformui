@@ -8,7 +8,7 @@ export const DummyData = () => {
       console.log("API:", data)
     },
   });
-  // if (loading) return <p>Loading data...</p>
+  if (loading) return <p>Loading data...</p>
   return (
       <>
         <div className='m-4'>

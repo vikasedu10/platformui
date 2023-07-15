@@ -14,17 +14,17 @@ spec:
     spec:
       containers:
         - name: testui
-          image: cacplatformui.azurecr.io/cacplatformui:v1
+          image: 024705512663.dkr.ecr.us-east-1.amazonaws.com/testui:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
           env:
             - name: REACT_APP_DNS_URL
-              value: platformui.com1
+              value: http://20.219.107.197/goengine
             - name: REACT_APP_NODE_ENV
               value: production
             - name: REACT_APP_PLATFORM_DNS_URL
-              value: platformapi.default.svc.cluster.local:9091/goengine
+              value: http://$ELB_DNS/goengine
             - name: REACT_APP_KEYCLOAK_URL
               value: http://keycloak.default.svc.cluster.local:8080/auth
             - name: REACT_APP_KEYCLOAK_REALM_NAME
@@ -33,11 +33,11 @@ spec:
               value: react-auth
           resources:
             limits:
-              cpu: "1"
-              memory: "1Gi"
+              cpu: 500m
+              memory: 500Mi
             requests:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: 50m
+              memory: 50Mi
 ---
 apiVersion: v1
 kind: Service
@@ -50,22 +50,56 @@ spec:
     - name: http
       port: 3000 # Port that the service should listen on
       targetPort: 3000 # Port that the pods are listening on
- # type: LoadBalancer # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
+  type: ClusterIP # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
+
 ---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: testui
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   # namespace: default
 spec:
   ingressClassName: nginx
   rules:
-    - host: a1123684039b04b808be426dac966ae3-1216601411.ap-south-1.elb.amazonaws.com # Nginx ELB DNS
-      http:
-        paths:
-          - pathType: Prefix
-            path: /
-            backend:
-              service:
-                name: testui
-                port:
-                  number: 3000
+    #- host: $ELB_DNS
+  - http:
+      paths:
+        - pathType: Prefix
+          path: /platformui(/|$)(.*)
+          backend:
+            service:
+              name: testui
+              port:
+                number: 3000
+        - pathType: Prefix
+          path: /(.*)
+          backend:
+            service:
+              name: testui
+              port:
+                number: 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: testui-static
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /static/$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /static(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: testui
+            port: 
+              number: 3000
