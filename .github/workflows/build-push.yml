@@ -33,7 +33,7 @@ jobs:
     steps:
     - name: Push Docker image created in previous step
       run: |
-        docker push ghcr.io/aeh-eac/platformui:v1.2
+        docker push ghcr.io/vikasedu10/platformui:v1.2
         echo "Image is pushed to Github CR successfully!"
   
   Trigger-Infrastructure:
