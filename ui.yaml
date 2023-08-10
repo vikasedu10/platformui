@@ -4,7 +4,7 @@ metadata:
   name: testui
   namespace: eternal
 spec:
-  replicas: 1 # Number of replicas you want to deploy
+  replicas: 1
   selector:
     matchLabels:
       app: testui
@@ -34,8 +34,8 @@ spec:
               value: react-auth
           resources:
             limits:
-              cpu: 500m
-              memory: 500Mi
+              cpu: 100m
+              memory: 100Mi
             requests:
               cpu: 50m
               memory: 50Mi
@@ -50,7 +50,7 @@ spec:
     app: testui
   ports:
     - name: http
-      port: 3000 # Port that the service should listen on
+      port: 80 # Port that the service should listen on
       targetPort: 3000 # Port that the pods are listening on
   type: ClusterIP # Use LoadBalancer type if running on cloud providers like AWS, GCP etc
 

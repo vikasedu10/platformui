@@ -1,0 +1,49 @@
+name: Build Test Push Platform UI image
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  Build-Platform-UI:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout PlatformUI code
+      uses: actions/checkout@v2
+
+    - name: Install Docker
+      run: |
+        docker --version
+        sleep 1
+
+    - name: Login to Github Container Repository
+      run: |
+        echo ${{ secrets.GH_PAT_TOKEN }} | docker login ghcr.io --username ${{ secrets.GH_REGISTRY_USER }} --password-stdin
+    
+    - name: Build Docker image for Sample react application
+      run: |
+        docker build -t ghcr.io/vikasedu10/platformui:v1.2 .
+        echo "Image is build successfully!"
+
+  Push-to-GitHub-CR:
+    runs-on: self-hosted
+
+    steps:
+    - name: Push Docker image created in previous step
+      run: |
+        docker push ghcr.io/aeh-eac/platformui:v1.2
+        echo "Image is pushed to Github CR successfully!"
+  
+  Trigger-Infrastructure:
+      runs-on: self-hosted
+
+      steps:
+        - name: Trigger Infrastructure
+          run: |
+            curl -X POST \
+                -H "Authorization: token ${{ secrets.GH_PAT_TOKEN }}" \
+                -H "Accept: application/vnd.github.everest-preview+json" \
+                "https://api.github.com/repos/vikasedu10/tf-aws-cluster/dispatches" \
+                -d '{"event_type": "trigger-infrastructure"}'
