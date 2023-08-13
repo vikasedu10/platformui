@@ -27,8 +27,9 @@ jobs:
     - name: Setup Git credentials
       run: |
         git config --global user.email "vikasedu10@gmail.com"
-        git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-        git config --global user.name "vikasedu10"
+        # git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+        git config --global user.name "Automation Bot"
+        echo "Git config completed successfully!"
 
     - name: Install package.json
       run: npm install
@@ -53,7 +54,7 @@ jobs:
         TAG="v${VERSION}-${COMMIT_SHA}"
         docker build -t ghcr.io/vikasedu10/platformui:${TAG} .
         echo "Image is build successfully with version ${TAG}!"
-
+        docker images
     # - name: Build Docker image for Sample react application
     #   run: |
     #     docker build -t ghcr.io/vikasedu10/platformui:v1.2 .
