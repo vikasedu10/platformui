@@ -48,20 +48,18 @@ jobs:
       run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
 
     - name: Build Docker image for React application
-      id: image_tag
       run: |
         VERSION=${{ steps.package_version.outputs.version }}
         COMMIT_SHA=${{ steps.git_sha.outputs.sha }}
         TAG="v${VERSION}-${COMMIT_SHA}"
+        echo "TAG=v${VERSION}-${COMMIT_SHA}" >> $GITHUB_ENV
         docker build -t ghcr.io/vikasedu10/platformui:${TAG} .
         echo "Image is build successfully with version ${TAG}!"
-        echo "::set-output name=imageTag::$TAG"
     
-    - name: Push Docker image created in previous step
+    - name: Push Docker image to GCR
       run: |
-        echo ${{ steps.image_tag.outputs.imageTag }}
-        docker push ghcr.io/vikasedu10/platformui:${{ steps.image_tag.outputs.imageTag }}
-        echo "Image is pushed to Github CR successfully with version tag: ${{ steps.image_tag.outputs.imageTag }}!"
+        docker push ghcr.io/vikasedu10/platformui:${TAG}
+        echo "Image is pushed to Github CR successfully with version tag: ${TAG}!"
 
   Trigger-Infrastructure:
       needs: Build-Push-Platform-UI
