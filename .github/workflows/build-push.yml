@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build-Platform-UI:
+  Build-Push-Platform-UI:
     permissions:
       contents: write
       issues: write
@@ -24,10 +24,10 @@ jobs:
     - name: Login to Github Container Repository
       run: |
         echo ${{ secrets.GH_PAT_TOKEN }} | docker login ghcr.io --username ${{ secrets.GH_REGISTRY_USER }} --password-stdin
+
     - name: Setup Git credentials
       run: |
         git config --global user.email "vikasedu10@gmail.com"
-        # git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
         git config --global user.name "Automation Bot"
         echo "Git config completed successfully!"
 
@@ -51,28 +51,19 @@ jobs:
       run: |
         VERSION=${{ steps.package_version.outputs.version }}
         COMMIT_SHA=${{ steps.git_sha.outputs.sha }}
-        TAG="v${VERSION}-${COMMIT_SHA}"
+        export TAG="v${VERSION}-${COMMIT_SHA}"
         docker build -t ghcr.io/vikasedu10/platformui:${TAG} .
         echo "Image is build successfully with version ${TAG}!"
         docker images
-    # - name: Build Docker image for Sample react application
-    #   run: |
-    #     docker build -t ghcr.io/vikasedu10/platformui:v1.2 .
-    #     echo "Image is build successfully!"
-
-
-  Push-to-GitHub-CR:
-    needs: Build-Platform-UI
-    runs-on: self-hosted
-
-    steps:
+    
     - name: Push Docker image created in previous step
       run: |
+        echo ${TAG}
         docker push ghcr.io/vikasedu10/platformui:${TAG}
         echo "Image is pushed to Github CR successfully with version tag: ${TAG}!"
 
   Trigger-Infrastructure:
-      needs: Push-to-GitHub-CR
+      needs: Build-Push-Platform-UI
       runs-on: self-hosted
 
       steps:
