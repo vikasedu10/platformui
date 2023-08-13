@@ -20,7 +20,11 @@ jobs:
     - name: Login to Github Container Repository
       run: |
         echo ${{ secrets.GH_PAT_TOKEN }} | docker login ghcr.io --username ${{ secrets.GH_REGISTRY_USER }} --password-stdin
-    
+    - name: Setup Git credentials
+      run: |
+        git config --global user.email "vikasedu10@gmail.com"
+        git config --global user.name "vikasedu10"
+
     - name: Install package.json
       run: npm install
 
