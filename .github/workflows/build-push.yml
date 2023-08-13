@@ -23,7 +23,7 @@ jobs:
     - name: Setup Git credentials
       run: |
         git config --global user.email "vikasedu10@gmail.com"
-        git config --global url."https://x-access-token:${{ secrets.GH_PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
+        git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
         git config --global user.name "vikasedu10"
 
     - name: Install package.json
@@ -31,7 +31,7 @@ jobs:
 
     - name: Run Semantic-Release
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run semantic-release
 
     - name: Get Version from package.json
