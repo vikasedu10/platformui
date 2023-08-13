@@ -15,28 +15,49 @@ jobs:
 
     - name: Install Docker
       run: |
-        docker --version
-        sleep 1
+        docker --version && sleep 1
 
     - name: Login to Github Container Repository
       run: |
         echo ${{ secrets.GH_PAT_TOKEN }} | docker login ghcr.io --username ${{ secrets.GH_REGISTRY_USER }} --password-stdin
     
-    - name: Build Docker image for Sample react application
+    - name: Run Semantic-Release
+      run: npm run semantic-release
+
+    - name: Get Version from package.json
+      id: package_version
+      run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+
+    - name: Get Short Commit SHA
+      id: git_sha
+      run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+    - name: Build Docker image for React application
       run: |
-        docker build -t ghcr.io/vikasedu10/platformui:v1.2 .
-        echo "Image is build successfully!"
+        VERSION=${{ steps.package_version.outputs.version }}
+        COMMIT_SHA=${{ steps.git_sha.outputs.sha }}
+        TAG="v${VERSION}-${COMMIT_SHA}"
+        docker build -t ghcr.io/vikasedu10/platformui:${TAG} .
+        echo "Image is build successfully with version ${TAG}!"
+
+    # - name: Build Docker image for Sample react application
+    #   run: |
+    #     docker build -t ghcr.io/vikasedu10/platformui:v1.2 .
+    #     echo "Image is build successfully!"
+
 
   Push-to-GitHub-CR:
+    needs: Build-Platform-UI
     runs-on: self-hosted
 
     steps:
     - name: Push Docker image created in previous step
       run: |
-        docker push ghcr.io/vikasedu10/platformui:v1.2
-        echo "Image is pushed to Github CR successfully!"
-  
+        docker push ghcr.io/vikasedu10/platformui:${TAG}
+        echo "Image is pushed to Github CR successfully with version tag: ${TAG}!"
+
   Trigger-Infrastructure:
+      needs: Push-to-GitHub-CR
       runs-on: self-hosted
 
       steps:
