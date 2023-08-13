@@ -6,7 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  check-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get commit message
+        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
+
+      - name: Check commit message
+        run: |
+          if [[ "${{ env.COMMIT_MESSAGE }}" == release:* ]] || [[ "${{ env.COMMIT_MESSAGE }}" == 'release: '* ]]; then
+            echo "RELEASE_TRIGGERED=true" >> $GITHUB_ENV
+          else
+            echo "RELEASE_TRIGGERED=false" >> $GITHUB_ENV
+          fi
+
   Build-Push-Platform-UI:
+    needs: check-commit
+    if: needs.check-commit.outputs.RELEASE_TRIGGERED == 'true'
     permissions:
       contents: write
       issues: write
