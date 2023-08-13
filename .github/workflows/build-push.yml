@@ -21,6 +21,8 @@ jobs:
       run: |
         echo ${{ secrets.GH_PAT_TOKEN }} | docker login ghcr.io --username ${{ secrets.GH_REGISTRY_USER }} --password-stdin
     
+    - name: Install package.json
+      run: npm install
     - name: Run Semantic-Release
       run: npm run semantic-release
 
