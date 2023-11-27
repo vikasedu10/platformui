@@ -48,6 +48,15 @@ podTemplate(label: label, serviceAccount: serviceaccount,
             volumeMounts:
             - name: trivy-cache
               mountPath: /root/.cache/trivy
+          - name: owasp-dependency-check
+            image: owasp/dependency-check:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+            - name: owasp-volume
+              mountPath: /usr/src/app
           volumes:
           - name: dockercred
             projected:
@@ -57,6 +66,8 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                   items:
                     - key: .dockerconfigjson
                       path: config.json
+          - name: owasp-volume
+            emptyDir: {}
           - name: trivy-cache
             emptyDir: {}
         """
@@ -80,6 +91,12 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                 sh "node --version"
                 sh "pwd"
                 // sh "npm run build"
+            }
+        }
+        stage("OWASP SCANNING") {
+            container(name: 'owasp-dependency-check') {
+                dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'DC'
+                dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
             }
         }
         stage('Trivy FS SCAN') {
