@@ -33,6 +33,12 @@ podTemplate(label: label, serviceAccount: serviceaccount,
             volumeMounts:
             - name: dockercred
               mountPath: /kaniko/.docker
+          - name: sonar-scanner
+            image: sonarsource/sonar-scanner-cli:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - cat
+            tty: true
           volumes:
           - name: dockercred
             projected:
@@ -54,36 +60,33 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                 echo "world"
                 sh "whoami"
                 sh "ls -a"
-                // sh "apt update"
-                // sh "apt install nano"
+                sh "apt update"
+                sh "apt install nano"
             }
         }
         stage('Build stage') {
             container ('nodejs') {
                 sh "node --version"
                 sh "pwd"
-                sh "ls -a"
-                sh "pwd"
-                sh "ls -a"
                 // sh "npm run build"
+            }
+        }
+        stage('SonarQube analysis') {
+            def SCANNER_HOME = tool 'SonarQube'
+            container (name: 'sonar-scanner') {
+                sh "pwd"
+                withSonarQubeEnv('SonarQube') {
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=samplePipeline -Dsonar.projectKey=samplePipeline"
+                }
             }
         }
         stage('Build & Push') {
             container (name: 'kaniko', shell: '/busybox/sh') {
                 sh "pwd"
                 sh "ls"
-                sh "/kaniko/executor --dockerfile ${workspace}/Dockerfile --context `pwd` --snapshotMode=redo --ignore-path /workspace --ignore-path /busybox --insecure-pull --skip-tls-verify-pull --insecure --skip-tls-verify --build-arg namespace=sample --destination registry.gitlab.com/vikasedu10/docker_registry:autov1.0"
-                
-            // writeFile file: "Dockerfile", text: """
-            //     FROM jenkins/agent
-            //     MAINTAINER CloudBees Support Team <support@cloudbees.com>
-            //     RUN mkdir /home/jenkins/.m2
-            // """
-    
-            // sh '''#!/busybox/sh
-            //     /kaniko/executor --context `pwd` --verbosity debug --destination registry.gitlab.com/vikasedu10/docker_registry:latest
-            //  '''
+                sh "/kaniko/executor --dockerfile ${workspace}/Dockerfile --context `pwd` --snapshotMode=redo --ignore-path /workspace --ignore-path /busybox --insecure-pull --skip-tls-verify-pull --insecure --skip-tls-verify --build-arg namespace=sample --destination registry.gitlab.com/vikasedu10/docker_registry:dev_autov1.0"
             }
         }
+        
     }
 }
