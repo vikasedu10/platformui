@@ -1,4 +1,4 @@
-def label = "devpod-${UUID.randomUUID().toString()}"
+def label = "mypod-${UUID.randomUUID().toString()}"
 def serviceaccount = "jenkins-admin"
 
 podTemplate(label: label, serviceAccount: serviceaccount,
@@ -39,6 +39,15 @@ podTemplate(label: label, serviceAccount: serviceaccount,
             command:
             - cat
             tty: true
+          - name: trivy
+            image: aquasec/trivy:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+            - name: trivy-cache
+              mountPath: /root/.cache/trivy
           volumes:
           - name: dockercred
             projected:
@@ -48,6 +57,8 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                   items:
                     - key: .dockerconfigjson
                       path: config.json
+          - name: trivy-cache
+            emptyDir: {}
         """
 ) {
     node(label) {
@@ -60,8 +71,8 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                 echo "world"
                 sh "whoami"
                 sh "ls -a"
-                sh "apt update"
-                sh "apt install nano"
+                // sh "apt update"
+                // sh "apt install nano"
             }
         }
         stage('Build stage') {
@@ -69,6 +80,13 @@ podTemplate(label: label, serviceAccount: serviceaccount,
                 sh "node --version"
                 sh "pwd"
                 // sh "npm run build"
+            }
+        }
+        stage('Trivy FS SCAN') {
+            container (name: 'trivy') {
+                sh "trivy --version"
+                // sh "trivy image registry.gitlab.com/vikasedu10/docker_registry:dev_autov1.0"
+                sh "trivy fs ."
             }
         }
         stage('SonarQube analysis') {
