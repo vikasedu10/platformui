@@ -109,9 +109,10 @@ podTemplate(label: label, serviceAccount: serviceaccount,
         stage('SonarQube analysis') {
             def SCANNER_HOME = tool 'SonarQube'
             container (name: 'sonar-scanner') {
-                sh "pwd"
-                withSonarQubeEnv('SonarQube') {
-                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=samplePipeline -Dsonar.projectKey=samplePipeline"
+                withSonarQubeEnv(credentialsId: 'sonar-tkn') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=samplePipeline -Dsonar.host.url=http://3.89.133.76:9000 -Dsonar.projectKey=samplePipeline"
+                    }
                 }
             }
         }
