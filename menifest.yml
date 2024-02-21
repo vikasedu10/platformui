@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: testui
-          image: 024705512663.dkr.ecr.us-east-1.amazonaws.com/testui:v1
+          image: vikasedu10/platformui:v1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 3000 # Port that your React app is running on
@@ -64,12 +64,17 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  # namespace: default
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/issuer: letsencrypt-prod
 spec:
-  ingressClassName: nginx
+  #ingressClassName: nginx # Dont use ingresClassName if kubernetes.io/ingress.class annotation is used
+  tls:
+  - hosts:
+    - platform.vikasedu10.shop
+    secretName: cert-tls-secret
   rules:
-    #- host: $ELB_DNS
-  - http:
+  - host: platform.vikasedu10.shop
+    http:
       paths:
         - pathType: Prefix
           path: /platformui(/|$)(.*)
@@ -95,10 +100,17 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /static/$2
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/issuer: letsencrypt-prod
 spec:
-  ingressClassName: nginx
+  #ingressClassName: nginx
+  tls:
+  - hosts:
+    - platform.vikasedu10.shop
+    secretName: cert-tls-secret
   rules:
-  - http:
+  - host: platform.vikasedu10.shop
+    http:
       paths:
       - path: /static(/|$)(.*)
         pathType: Prefix
